@@ -1,0 +1,51 @@
+import numpy as np
+#import matplotlib.pyplot as plt 
+
+
+def back_substitution(A,X,B):   
+    
+    n = B.size
+   
+    # A[n-1] should not be zero
+    if A[n-1, n-1] == 0:
+        raise ValueError
+
+    # Take the last element , xi=bi/dii
+    X[n-1] = B[n-1]/A[n-1, n-1]
+    
+    # Create a temporary variable inside i loop
+    X_iTEMP = 0
+    for i in range(n-2, -1, -1):
+        # Create a temporary variable inside j loop sum
+        X_jTEMP = 0
+        for j in range (i+1, n):
+            X_jTEMP += A[i, j]*X[j]
+        
+        X_iTEMP = B[i] - X_jTEMP
+        
+        X[i] = X_iTEMP/A[i, i]
+    return X
+# ****************************#
+# ****************************#
+n= int(input("Enter size of square matrix"))
+max_el= int(input("Maximum value of element in the matrix"))
+
+# Create a matrix with Random Numbers
+A_TEMP = np.random.randint(max_el, size=(n,n))
+
+# Create upper triangular Matrix
+A=np.triu(A_TEMP)
+print('A is:\n', A)
+
+# Create Matrix B with size nx1 and put random values 
+B = np.random.randint(max_el, size=(n,1))
+print('B is:\n',B)
+
+# Create Matrix X with zeros, nx1 matrix
+X=np.zeros_like(B)
+    
+# Call Back Substitution function    
+back_substitution(A,X,B)
+
+print('Solution X is :\n:')
+print(X)
